@@ -1,5 +1,7 @@
 import React,{ Component } from 'react';
 import './App.css';
+import Recherche from './components/Recherche';
+
 
 
 // il ya 2 types de Composants:
@@ -50,6 +52,7 @@ class App extends Component {
       <div className="App">
        
         <h1>Noâ Bouskila</h1>
+        
         <Dev/>
         {/* exemple de composant avec propriete : */}
 
@@ -68,8 +71,14 @@ class App extends Component {
         {/* pour changer le fruit on fait appel au onClick 
         sachant quen react les ecouteurs devenement sont en camelCase */}
         <button onClick={this.changerFruits}>Changer les Fruits</button>
+
+        <h2>Annuaire des administrations en Ile-de-France.</h2>
+        <Recherche/>
+
       </div>
     );
+
+    
   }
 }
 
