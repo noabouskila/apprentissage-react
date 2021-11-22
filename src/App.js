@@ -1,12 +1,53 @@
+// import { isTSThisType } from '@babel/types';
 import React,{ Component } from 'react';
 import './App.css';
 import Recherche from './components/Recherche';
+import { Card, Message }from "semantic-ui-react";
+import Etablissement from './components/etablissement';
+
 
 
 
 // il ya 2 types de Composants:
 // 1) composant de type class :
 class App extends Component {
+
+  // creation d'etat initial du composant 
+  // avec des données : data et des erreurs : error
+  state={
+    data:[],
+    error: ""
+  }
+
+  // appel de l' API par une function
+  // rajouter async et await pour attendre de recuperer les infos pour executer le code
+  // pour tester l'api il faut utilser try{}catch(e) avec le parametre  e : error
+  onSearch = async (dpt,type) =>{
+    if(dpt && type){
+      try{
+        let response =await fetch(`https://etablissements-publics.api.gouv.fr/v3/departements/${dpt}/${type}`)
+        let data = await response.json();
+        // recuperer les données et les envoyer dans le composant state en utilisant setState: 
+        this.setState({
+          data:data.features,
+          // et donc si jai recuperé le resultat il n'ya pas d'erreur donc on laisse error:'' vide 
+          // car la gestion des erreurs se fait apres
+          error: ''
+        })
+      }catch(e){
+        this.setState({error:'erreur lors de la recherche'})
+      }
+    }else{
+      this.setState({error:"Merci de choisir un departement et un établissement"})
+    }
+  }
+
+
+  // methode qui va vider toutes les informations quil ya dans notre etat pour le bouton vider la recherche
+  // puis envoyer la methode à notre composant de recherche
+  onEmpty = ()=>{
+    this.setState({ data: [] , error:''})
+  }
 
   /* creation d'etat :variable propre au composant qui inclut l'etat initial du composant 
   l'etat ne peut se creer que dans une class et non dans un composant fonctionnel */
@@ -43,6 +84,14 @@ class App extends Component {
     )
   }
 
+  // fonction d'affichage des resultats : avec reactl  fonction map()=>{return...} remplace la boucle for
+  renderResults=()=>{
+    return this.state.data.map(
+      (etablissement)=>{
+      return <Etablissement key={etablissement.properties.id} properties={etablissement.properties}/>
+    })
+  }
+
   render(){
     // afficher la valeur de notre etat
     // on voit que le legume ne change pas car on la pas mit dans setState
@@ -73,7 +122,15 @@ class App extends Component {
         <button onClick={this.changerFruits}>Changer les Fruits</button>
 
         <h2>Annuaire des administrations en Ile-de-France.</h2>
-        <Recherche/>
+        <Recherche onSearch={this.onSearch} onEmpty={this.onEmpty}/>
+        {this.state.error ? <Message warning>{this.state.error}</Message> : undefined}
+
+        {this.state.data?
+         <Card.Group>
+           {this.renderResults()}
+         </Card.Group>
+         :undefined
+        }
 
       </div>
     );

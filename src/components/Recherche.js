@@ -14,7 +14,7 @@ class Recherche extends Component{
         this.setState({dpt: data.value});
     }
     onTypeChange =(e,data)=>{
-        this.setState({ type: data.value})
+        this.setState({type: data.value})
     }
 
     
@@ -22,14 +22,14 @@ class Recherche extends Component{
     render(){
 
         const optionDpt =[
-            {key:"75", value:75 , text:"Paris"},
-            {key:"77", value:77 , text:"Seine-et-Marne"},
-            {key:"78", value:78 , text:"Yvelines"},
-            {key:"91", value:91 , text:"Essone"},
-            {key:"92", value:92 , text:"Haut-de-Seine"},
-            {key:"93", value:93 , text:"Seine-Saint-Denis"},
-            {key:"94", value:94 , text:"Val-de-Marne"},
-            {key:"95", value:95 , text:"Val-d'Oise"},
+            {key:"75", value:"75" , text:"Paris"},
+            {key:"77", value:"77" , text:"Seine-et-Marne"},
+            {key:"78", value:"78" , text:"Yvelines"},
+            {key:"91", value:"91" , text:"Essone"},
+            {key:"92", value:"92" , text:"Haut-de-Seine"},
+            {key:"93", value:"93" , text:"Seine-Saint-Denis"},
+            {key:"94", value:"94" , text:"Val-de-Marne"},
+            {key:"95", value:"95" , text:"Val-d'Oise"},
         ];
 
         const optionType =[
@@ -43,8 +43,8 @@ class Recherche extends Component{
             <div className="recherche">
             <Select placeholder="choisissez un departement" options={optionDpt} onChange={this.onDptChange}/>
             <Select placeholder="choisissez une administration" options={optionType} onChange={this.onTypeChange}/>
-            <Button primary>Lancer la recherche</Button>
-            <Button secondary>Vider</Button>
+            <Button primary onClick={()=> this.props.onSearch(this.state.dpt, this.state.type)}>Lancer la recherche</Button>
+            <Button secondary onClick={this.props.onEmpty}>Vider</Button>
             </div>
         )
     }
